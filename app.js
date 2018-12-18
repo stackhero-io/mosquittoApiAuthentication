@@ -12,12 +12,12 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: '/users/presence',
+        topic: '/presence',
         permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
       },
       {
         topic: '/users/testUser/#',
-        permission: 'rw'
+        permission: 'sub'
       }
     ]
   },
@@ -27,12 +27,12 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: '/users/presence',
+        topic: '/presence',
         permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
       },
       {
         topic: '/users/testUser2/#',
-        permission: 'rw'
+        permission: 'sub'
       }
     ]
   }
@@ -52,11 +52,11 @@ app.post(
 
     // We send a 200 if the authentication succeed or 401 else
     if (userFound) {
-      return res.status(200).send('ok');
+      return res.status(200).send();
     }
     else {
       console.warn(`User ${username} doesn't exist or password is incorrect`);
-      return res.status(401).send('ko');
+      return res.status(401).send();
     }
   }
 );
@@ -75,10 +75,10 @@ app.post(
 
     // We send a 200 if he is a super user or 401 else
     if (userFound && userFound.isSuper) {
-      return res.status(200).send('ok');
+      return res.status(200).send();
     }
     else {
-      return res.status(401).send('ko');
+      return res.status(401).send();
     }
   }
 );
@@ -114,11 +114,11 @@ app.post(
     });
 
     if (allowed) {
-      return res.status(200).send('ok');
+      return res.status(200).send();
     }
     else {
-      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission ${permissions[acc]}`);
-      return res.status(401).send('ko');
+      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission "${permissions[acc]}"`);
+      return res.status(401).send();
     }
   }
 );

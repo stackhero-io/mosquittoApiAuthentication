@@ -55,6 +55,7 @@ app.post(
       return res.status(200).send('ok');
     }
     else {
+      console.warn(`User ${username} doesn't exist or password is incorrect`);
       return res.status(401).send('ko');
     }
   }
@@ -108,7 +109,7 @@ app.post(
         return false;
       }
 
-      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && acl.permission === permissions[acl.permission]);
+      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && acl.permission === permissions[acc]);
       return aclValidated;
     });
 
@@ -116,6 +117,7 @@ app.post(
       return res.status(200).send('ok');
     }
     else {
+      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission ${permissions[acc]}`);
       return res.status(401).send('ko');
     }
   }

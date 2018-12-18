@@ -17,7 +17,7 @@ const users = [
       },
       {
         topic: '/users/testUser/#',
-        permission: 'sub'
+        permission: 'rw'
       }
     ]
   },
@@ -32,7 +32,7 @@ const users = [
       },
       {
         topic: '/users/testUser2/#',
-        permission: 'sub'
+        permission: 'rw'
       }
     ]
   }

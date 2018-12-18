@@ -1,6 +1,27 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+app.use(express.bodyParser());
 const port = 8080;
+
+const users = [
+  {
+    login: 'testUser',
+    password: 'testPassword',
+    isSuper: false
+  },
+  {
+    login: 'testUser2',
+    password: 'testPassword2',
+    isSuper: true
+  },
+  {
+    login: 'testUser2',
+    password: 'testPassword2',
+    isSuper: true
+  }
+];
+
 
 // Define GET route "/"
 app.get(

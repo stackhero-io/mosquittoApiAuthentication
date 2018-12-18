@@ -12,7 +12,7 @@ app.get(
 // Define POST route "/user"
 app.post(
   '/user',
-  (req, res) => res.send(JSON.stringify(req.body))
+  (req, res) => { console.log(req.body); res.send(JSON.stringify(req.body)) }
 );
 
 

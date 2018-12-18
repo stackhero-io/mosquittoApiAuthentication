@@ -117,7 +117,7 @@ app.post(
       return res.status(200).send();
     }
     else {
-      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission "${permissions[acc]}"`);
+      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission "${acc}"`);
       return res.status(401).send();
     }
   }

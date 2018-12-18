@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mqttWildcard = require('mqtt-wildcard');
 const app = express();
 app.use(bodyParser());
 const port = 8080;
@@ -12,7 +13,11 @@ const users = [
     acls: [
       {
         topic: '/users/presence',
-        permission: 'r' // Permission can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+        permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+      },
+      {
+        topic: '/users/testUser/#',
+        permission: 'rw'
       }
     ]
   },
@@ -23,7 +28,11 @@ const users = [
     acls: [
       {
         topic: '/users/presence',
-        permission: 'r' // Permission can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+        permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+      },
+      {
+        topic: '/users/testUser2/#',
+        permission: 'rw'
       }
     ]
   }
@@ -31,48 +40,84 @@ const users = [
 
 
 // Define POST route "/user"
+// This route will be used to check the user login and password
 app.post(
   '/user',
   (req, res) => {
+    // Mosquitto sends us the username and the password
     const { username, password } = req.body;
+
+    // We try to find the user
     const userFound = users.find(user => user.login === username && user.password === password);
-    userFound
-      ? res.status(200).send('ok')
-      : res.status(401).send('ko');
+
+    // We send a 200 if the authentication succeed or 401 else
+    if (userFound) {
+      return res.status(200).send('ok');
+    }
+    else {
+      return res.status(401).send('ko');
+    }
   }
 );
 
 
 // Define POST route "/superUser"
+// This route will be used to check if the user is a super user or not
 app.post(
   '/superUser',
   (req, res) => {
-    console.log(req.body);
-    const { username, password } = req.body;
-    const userFound = users.find(user => user.login === username && user.password === password);
-    userFound && userFound.isSuper === true
-      ? res.status(200).send('ok')
-      : res.status(401).send('ko');
+    // Mosquitto sends us the username
+    const { username } = req.body;
+
+    // We try to find the user and check if he's a super user
+    const userFound = users.find(user => user.login === username);
+
+    // We send a 200 if he is a super user or 401 else
+    if (userFound && userFound.isSuper) {
+      return res.status(200).send('ok');
+    }
+    else {
+      return res.status(401).send('ko');
+    }
   }
 );
 
 
 // Define POST route "/acls"
+// This route will be used to check the topic ACL
 app.post(
   '/acls',
   (req, res) => {
-    // console.log(req.body);
-    res.send();
-    // const { username, topic, clientId, acc } = req.body;
+    const { username, topic, clientId, acc } = req.body;
 
-    // // acc:
-    // // - 1: read
-    // // - 2: write
-    // // - 2: read and write
-    // // - 4: subscribe
+    // "acc" represents the type of access required by the client to this topic
+    // - 1: read
+    // - 2: write
+    // - 3: read and write
+    // - 4: subscribe
 
-    // const userFound = users.find(user => user.login === username);
-    // res.status(userFound && userFound.isSuper === true ? 200 : 401).send();
+    const permissions = {
+      1: 'r',
+      2: 'w',
+      3: 'rw',
+      4: 'sub'
+    };
+
+    const allowed = users.find(user => {
+      if (user.login !== username) {
+        return false;
+      }
+
+      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && acl.permission === permissions[acl.permission]);
+      return aclValidated;
+    });
+
+    if (allowed) {
+      return res.status(200).send('ok');
+    }
+    else {
+      return res.status(401).send('ko');
+    }
   }
 );
 

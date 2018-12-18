@@ -8,26 +8,26 @@ const users = [
   {
     login: 'testUser',
     password: 'testPassword',
-    isSuper: false
+    isSuper: false,
+    acls: [
+      {
+        topic: '/users/presence',
+        permission: 'r' // Permission can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+      }
+    ]
   },
   {
     login: 'testUser2',
     password: 'testPassword2',
-    isSuper: true
-  },
-  {
-    login: 'testUser2',
-    password: 'testPassword2',
-    isSuper: true
+    isSuper: false,
+    acls: [
+      {
+        topic: '/users/presence',
+        permission: 'r' // Permission can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+      }
+    ]
   }
 ];
-
-
-// Define GET route "/"
-app.get(
-  '/',
-  (req, res) => res.send('Stackhero\'s Mosquitto API authentication example')
-);
 
 
 // Define POST route "/user"
@@ -36,7 +36,9 @@ app.post(
   (req, res) => {
     const { username, password } = req.body;
     const userFound = users.find(user => user.login === username && user.password === password);
-    res.status(userFound ? 200 : 401).send();
+    userFound
+      ? res.status(200).send('ok')
+      : res.status(401).send('ko');
   }
 );
 
@@ -45,9 +47,12 @@ app.post(
 app.post(
   '/superUser',
   (req, res) => {
+    console.log(req.body);
     const { username, password } = req.body;
     const userFound = users.find(user => user.login === username && user.password === password);
-    res.status(userFound && userFound.isSuper === true ? 200 : 401).send();
+    userFound && userFound.isSuper === true
+      ? res.status(200).send('ok')
+      : res.status(401).send('ko');
   }
 );
 
@@ -56,13 +61,21 @@ app.post(
 app.post(
   '/acls',
   (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     res.send();
-    // const { username, password } = req.body;
-    // const userFound = users.find(user => user.login === username && user.password === password);
+    // const { username, topic, clientId, acc } = req.body;
+
+    // // acc:
+    // // - 1: read
+    // // - 2: write
+    // // - 2: read and write
+    // // - 4: subscribe
+
+    // const userFound = users.find(user => user.login === username);
     // res.status(userFound && userFound.isSuper === true ? 200 : 401).send();
   }
 );
+
 
 
 // Start Express server

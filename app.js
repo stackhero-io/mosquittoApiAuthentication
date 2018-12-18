@@ -33,7 +33,35 @@ app.get(
 // Define POST route "/user"
 app.post(
   '/user',
-  (req, res) => { console.log(req.body); res.send(JSON.stringify(req.body)) }
+  (req, res) => {
+    const { username, password } = req.body;
+    const userFound = users.find(user => user.login === username && user.password === password);
+    res.status(userFound ? 200 : 401).send();
+  }
+);
+
+
+// Define POST route "/superUser"
+app.post(
+  '/superUser',
+  (req, res) => {
+    const { username, password } = req.body;
+    const userFound = users.find(user => user.login === username && user.password === password);
+    res.status(userFound && userFound.isSuper === true ? 200 : 401).send();
+  }
+);
+
+
+// Define POST route "/acls"
+app.post(
+  '/acls',
+  (req, res) => {
+    console.log(req.body);
+    res.send();
+    // const { username, password } = req.body;
+    // const userFound = users.find(user => user.login === username && user.password === password);
+    // res.status(userFound && userFound.isSuper === true ? 200 : 401).send();
+  }
 );
 
 

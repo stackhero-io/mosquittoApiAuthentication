@@ -98,10 +98,10 @@ app.post(
     // - 4: subscribe
 
     const permissions = {
-      1: 'r',
-      2: 'w',
-      3: 'rw',
-      4: 'sub'
+      r: [ 1 ],
+      w: [ 2 ],
+      rw: [ 1, 2 ],
+      sub: [ 1, 4 ]
     };
 
     const allowed = users.find(user => {
@@ -109,7 +109,7 @@ app.post(
         return false;
       }
 
-      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && acl.permission === permissions[acc]);
+      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && permissions[acl.permission].indexOf(acc) !== -1);
       return aclValidated;
     });
 

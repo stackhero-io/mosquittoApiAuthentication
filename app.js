@@ -12,12 +12,12 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: '/presence',
-        permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+        topic: 'presence',
+        permissions: [ 'read' ] // Can be "read", "write" or "subscribe"
       },
       {
-        topic: '/users/testUser/#',
-        permission: 'rw'
+        topic: 'users/testUser/#',
+        permissions: [ 'read', 'write', 'subscribe' ]
       }
     ]
   },
@@ -27,12 +27,12 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: '/presence',
-        permission: 'r' // Can be "r" for read, "w" for write, "rw" for read and write, "sub" for subscribe
+        topic: 'presence',
+        permissions: [ 'read' ]
       },
       {
-        topic: '/users/testUser2/#',
-        permission: 'rw'
+        topic: 'users/testUser2/#',
+        permissions: [ 'read', 'write', 'subscribe' ]
       }
     ]
   }
@@ -97,19 +97,22 @@ app.post(
     // - 3: read and write
     // - 4: subscribe
 
-    const permissions = {
-      r: [ 1 ],
-      w: [ 2 ],
-      rw: [ 1, 2 ],
-      sub: [ 1, 4 ]
-    };
+    const accToPermissions = {
+      1: [ 'read' ],
+      2: [ 'write' ],
+      3: [ 'read', 'write' ],
+      4: [ 'subscribe' ]
+    }
 
     const allowed = users.find(user => {
       if (user.login !== username) {
         return false;
       }
 
-      const aclValidated = user.acls.find(acl => mqttWildcard(topic, acl.topic) !== null && permissions[acl.permission].indexOf(acc) !== -1);
+      const aclValidated = user.acls.find(
+        acl => mqttWildcard(topic, acl.topic) !== null
+        && accToPermissions[acc].every(v => acl.permissions.includes(v))
+      );
       return aclValidated;
     });
 

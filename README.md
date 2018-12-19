@@ -4,10 +4,11 @@ You'll find in this repository an example of how to handle authentication on Mos
 
 This API is created in Node.js with Express.
 
+
 ## Create a Node.js service
 
 In stackhero, create a Node.js service. You can select LTS or CURRENT version, both will work, but we recommend the LTS one.
-Add you SSH public key in configuration and validate the configuration.
+Add your SSH public key in configuration and validate the configuration.
 
 
 ## Clone the app
@@ -19,7 +20,7 @@ git clone https://github.com/stackhero-io/mosquittoApiAuthentication.git
 cd mosquittoApiAuthentication
 ```
 
-It's a good idea to check the `app.js` file content and change the default passwords, to avoid someone to connect on your Mosquitto server.
+It's a good idea to check the `app.js` file content and change the default passwords, to avoid that someone connects to your Mosquitto server.
 
 
 ## Deploy the app

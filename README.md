@@ -25,9 +25,11 @@ It's a good idea to check the `app.js` file content and change the default passw
 
 ## Deploy the app
 
-From your Node.js service, in Stackhero's console, copy the `git remote command` in the cloned app directory.
+From your Node.js service, in Stackhero's console, copy the `git remote command` and paste it to the cloned app directory (you'll have to do that only the first time).
 
 Then, deploy the app: `git push -u stackhero`
+
+If you want to change the `app.js` content, you'll have to commit the changes (`git commit -m`)
 
 
 ## Configure your Mosquitto service

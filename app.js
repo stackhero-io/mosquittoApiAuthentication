@@ -12,12 +12,8 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: 'presence',
-        permissions: [ 'read', 'write' ] // Can be "read", "write" or "subscribe"
-      },
-      {
         topic: 'users/testUser/#',
-        permissions: [ 'read', 'write', 'subscribe' ]
+        permissions: [ 'read', 'write', 'subscribe' ] // Can be "read", "write" or "subscribe"
       },
       {
         topic: 'global',
@@ -31,12 +27,8 @@ const users = [
     isSuper: false,
     acls: [
       {
-        topic: 'presence',
-        permissions: [ 'read', 'write' ]
-      },
-      {
         topic: 'users/testUser2/#',
-        permissions: [ 'read', 'write', 'subscribe' ]
+        permissions: [ 'read', 'write', 'subscribe' ] // Can be "read", "write" or "subscribe"
       },
       {
         topic: 'global',

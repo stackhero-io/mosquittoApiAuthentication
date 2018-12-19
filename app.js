@@ -13,11 +13,15 @@ const users = [
     acls: [
       {
         topic: 'presence',
-        permissions: [ 'read' ] // Can be "read", "write" or "subscribe"
+        permissions: [ 'read', 'write' ] // Can be "read", "write" or "subscribe"
       },
       {
         topic: 'users/testUser/#',
         permissions: [ 'read', 'write', 'subscribe' ]
+      },
+      {
+        topic: 'global',
+        permissions: [ 'write', 'read', 'subscribe' ]
       }
     ]
   },
@@ -28,11 +32,15 @@ const users = [
     acls: [
       {
         topic: 'presence',
-        permissions: [ 'read' ]
+        permissions: [ 'read', 'write' ]
       },
       {
         topic: 'users/testUser2/#',
         permissions: [ 'read', 'write', 'subscribe' ]
+      },
+      {
+        topic: 'global',
+        permissions: [ 'write', 'read', 'subscribe' ]
       }
     ]
   }

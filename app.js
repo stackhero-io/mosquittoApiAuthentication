@@ -55,7 +55,7 @@ app.post(
       return res.status(200).send();
     }
     else {
-      console.warn(`User ${username} doesn't exist or password is incorrect`);
+      console.warn(`⛔️ User ${username} doesn't exist or password is incorrect`);
       return res.status(401).send();
     }
   }
@@ -120,7 +120,7 @@ app.post(
       return res.status(200).send();
     }
     else {
-      console.warn(`Error when checking ACL for user ${username} on topic ${topic} with permission "${acc}"`);
+      console.warn(`⛔️ Error when checking ACL for user ${username} on topic ${topic} with permission "${acc}"`);
       return res.status(401).send();
     }
   }
